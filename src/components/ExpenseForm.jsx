@@ -57,7 +57,8 @@ export default function ExpenseForm({ setExpenses }) {
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setExpense((prevState) => ({ ...prevState, [name]: value }));
+    setExpense((prevState) => ({ ...prevState, [name]: value }))
+    setErrors({})
   };
   return (
     <form className="expense-htmlForm" onSubmit={handleSubmit}>
