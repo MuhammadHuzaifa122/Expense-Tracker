@@ -114,6 +114,10 @@ main {
     background-color: #ddd;
 }
 
+#category{
+    height: 28px;
+    font: inherit;
+}
 @media (max-width: 900px) {
     body {
         margin-inline: 16px;
