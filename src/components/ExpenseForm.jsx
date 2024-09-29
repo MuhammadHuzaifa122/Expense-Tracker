@@ -7,18 +7,44 @@ export default function ExpenseForm({ setExpenses }) {
     amount: "",
   });
 
-  const titleRef = useRef(null);
-  const categoryRef = useRef(null);
-  const amountRef = useRef(null);
+  const[errors, setErrors] = useState({})
 
+  const validate = (formData) =>{
+    console.log(formData);
+    const errorData = {}
+    if (!formData.title) {
+      errorData.title = "Title is required";
+    }
+    if (!formData.category) {
+      errorData.category = "Category is required";
+    }
+    if (!formData.amount) {
+      errorData.amount = "Amount is required";
+    }
+    setErrors(errorData)
+    return errorData
+  }
+  
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    const validateResult = validate(expense)
+
+    if(Object.keys(validateResult).length) return
+    
     setExpenses((prevState) => [
       ...prevState,
-      {...expense, id: crypto.randomUUID()}
+      { ...expense, id: crypto.randomUUID() },
     ]);
-
+    setExpense({
+      title: "",
+      category: "",
+      amount: "",
+    });
+    
     // using useRef()
+    // const titleRef = useRef(null);
+    // const categoryRef = useRef(null);
+    // const amountRef = useRef(null);
     // setExpenses((prevState) => [
     //   ...prevState,
     //   {
@@ -28,12 +54,10 @@ export default function ExpenseForm({ setExpenses }) {
     //     id: crypto.randomUUID(),
     //   },
     // ]);
-
-    setExpense({
-      title: '',
-      category: '',
-      amount: '',
-    })
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setExpense((prevState) => ({ ...prevState, [name]: value }));
   };
   return (
     <form className="expense-htmlForm" onSubmit={handleSubmit}>
@@ -43,11 +67,10 @@ export default function ExpenseForm({ setExpenses }) {
           id="title"
           name="title"
           value={expense.title}
-          onChange={(e) =>
-            setExpense((prevState) => ({ ...prevState, title: e.target.value }))
-          }
+          onChange={handleChange}
           // ref={titleRef}
-        />
+          />
+        <p className="error">{errors.title}</p>
       </div>
       <div className="input-container">
         <label htmlFor="category">Category</label>
@@ -55,15 +78,10 @@ export default function ExpenseForm({ setExpenses }) {
           id="category"
           name="category"
           value={expense.category}
-          onChange={(e) =>
-            setExpense((prevState) => ({
-              ...prevState,
-              category: e.target.value,
-            }))
-          }
+          onChange={handleChange}
           // ref={categoryRef}
         >
-          <option value="" hidden >
+          <option value="" hidden>
             Select Category
           </option>
           <option value="Grocery">Grocery</option>
@@ -72,6 +90,7 @@ export default function ExpenseForm({ setExpenses }) {
           <option value="Education">Education</option>
           <option value="Medicine">Medicine</option>
         </select>
+        <p className="error">{errors.category}</p>
       </div>
       <div className="input-container">
         <label htmlFor="amount">Amount</label>
@@ -79,14 +98,10 @@ export default function ExpenseForm({ setExpenses }) {
           id="amount"
           name="amount"
           value={expense.amount}
-          onChange={(e) =>
-            setExpense((prevState) => ({
-              ...prevState,
-              amount: e.target.value,
-            }))
-          }
+          onChange={handleChange}
           // ref={amountRef}
         />
+         <p className="error">{errors.amount}</p>
       </div>
       <button className="add-btn">Add</button>
     </form>
