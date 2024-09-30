@@ -1,14 +1,9 @@
 import React, { useState } from 'react'
+import { useFilter } from '../../Hooks/useFilter';
 
 export default function ExpenseTable({expenses}) {
 
-
-  const [category, setCategory] = useState('')
-  const filteredExpenses = expenses.filter((expenses) => {
-    return expenses.category.toLowerCase().includes(category);
-  })
-  console.log(filteredExpenses);
-  
+  const [filteredData, setQuery] = useFilter(expenses, (data) => data.category)
 
   return (
     <table className="expense-table">
@@ -16,7 +11,7 @@ export default function ExpenseTable({expenses}) {
           <tr>
             <th>Title</th>
             <th>
-              <select onChange={(e) => setCategory(e.target.value.toLocaleLowerCase())}>
+              <select onChange={(e) => setQuery(e.target.value.toLocaleLowerCase())}>
                 <option value="">All</option>
                 <option value="grocery">Grocery</option>
                 <option value="clothes">Clothes</option>
@@ -57,7 +52,7 @@ export default function ExpenseTable({expenses}) {
         <tbody>
           
           {
-            filteredExpenses.map(({id, title, category, amount}) => <tr key={id}>
+            filteredData.map(({id, title, category, amount}) => <tr key={id}>
             <td>{title}</td>
             <td>{category}</td>
             <td>{amount}</td>
