@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Input from "./Input";
+import SelectMenu from "./SelectMenu";
 
 export default function ExpenseForm({ setExpenses }) {
   const [expense, setExpense] = useState({
@@ -71,28 +72,16 @@ export default function ExpenseForm({ setExpenses }) {
         onChange={handleChange}
         error={errors.title}
       />
-      <div className="input-container">
-        <label htmlFor="category">Category</label>
-        <select
-          id="category"
-          name="category"
-          value={expense.category}
-          onChange={handleChange}
-          error={errors.title}
-          // ref={categoryRef}
-        >
-          <option value="" hidden>
-            Select Category
-          </option>
-          <option value="Grocery">Grocery</option>
-          <option value="Clothes">Clothes</option>
-          <option value="Bills">Bills</option>
-          <option value="Education">Education</option>
-          <option value="Medicine">Medicine</option>
-        </select>
-        <p className="error">{errors.category}</p>
-      </div>
-
+      <SelectMenu
+       label="Category"
+        id="category"
+        name="category"
+        value={expense.category}
+        onChange={handleChange}
+        options={["Grocery", "Clothes", "Bills", "Education", "Medicine"]}
+        defaultOption = 'Select Category'
+        error={errors.category}
+      />
       <Input
         label="Amount"
         id="amount"
