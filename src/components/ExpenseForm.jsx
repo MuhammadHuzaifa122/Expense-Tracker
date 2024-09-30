@@ -32,7 +32,7 @@ export default function ExpenseForm({ setExpenses }) {
         }
       })
     })
-    
+
     setErrors(errorData);
     return errorData;
   };
@@ -52,20 +52,6 @@ export default function ExpenseForm({ setExpenses }) {
       category: "",
       amount: "",
     });
-
-    // using useRef()
-    // const titleRef = useRef(null);
-    // const categoryRef = useRef(null);
-    // const amountRef = useRef(null);
-    // setExpenses((prevState) => [
-    //   ...prevState,
-    //   {
-    //     title: titleRef.current.value,
-    //     category: categoryRef.current.value,
-    //     amount: amountRef.current.value,
-    //     id: crypto.randomUUID(),
-    //   },
-    // ]);
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
