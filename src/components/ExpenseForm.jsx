@@ -2,13 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Input from "./Input";
 import SelectMenu from "./SelectMenu";
 
-export default function ExpenseForm({ setExpenses }) {
-  const [expense, setExpense] = useState({
-    title: "",
-    category: "",
-    amount: "",
-  });
-
+export default function ExpenseForm({ setExpenses, setExpense, expense }) {
   const [errors, setErrors] = useState({});
 
   const validationConfig = {
