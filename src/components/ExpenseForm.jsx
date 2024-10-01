@@ -2,30 +2,39 @@ import React, { useEffect, useRef, useState } from "react";
 import Input from "./Input";
 import SelectMenu from "./SelectMenu";
 
-export default function ExpenseForm({ setExpenses, setExpense, expense }) {
+export default function ExpenseForm({
+  setExpenses,
+  setExpense,
+  expense,
+  editingRowId,
+  setEditingRowId
+}) {
   const [errors, setErrors] = useState({});
 
   const validationConfig = {
-    title: [{ required: true, message: "Title is required" }, {minLength: 3, message: "Title must be at least 3 characters"}],
+    title: [
+      { required: true, message: "Title is required" },
+      { minLength: 3, message: "Title must be at least 3 characters" },
+    ],
     category: [{ required: true, message: "Category is required" }],
     amount: [{ required: true, message: "Amount is required" }],
-  }
+  };
 
   const validate = (formData) => {
-    const errorData = {}
+    const errorData = {};
 
     Object.entries(formData).forEach(([key, value]) => {
       validationConfig[key].some((rule) => {
         if (rule.required && !value) {
-          errorData[key] = rule.message
-          return true
+          errorData[key] = rule.message;
+          return true;
         }
         if (rule.minLength && value.length < 3) {
-          errorData[key] = rule.message
-          return true
+          errorData[key] = rule.message;
+          return true;
         }
-      })
-    })
+      });
+    });
 
     setErrors(errorData);
     return errorData;
@@ -36,6 +45,24 @@ export default function ExpenseForm({ setExpenses, setExpense, expense }) {
     const validateResult = validate(expense);
 
     if (Object.keys(validateResult).length) return;
+
+    if (editingRowId) {
+      setExpenses((prevState) => 
+        prevState.map((prevExpense) => {
+          if (prevExpense.id === editingRowId) {
+            return { ...expense, id: editingRowId };
+          }
+          return prevExpense;
+        })
+      )
+      setExpense({
+        title: "",
+        category: "",
+        amount: "",
+      });
+      setEditingRowId('')
+      return
+    }
 
     setExpenses((prevState) => [
       ...prevState,
@@ -63,13 +90,13 @@ export default function ExpenseForm({ setExpenses, setExpense, expense }) {
         error={errors.title}
       />
       <SelectMenu
-       label="Category"
+        label="Category"
         id="category"
         name="category"
         value={expense.category}
         onChange={handleChange}
         options={["Grocery", "Clothes", "Bills", "Education", "Medicine"]}
-        defaultOption = 'Select Category'
+        defaultOption="Select Category"
         error={errors.category}
       />
       <Input
@@ -82,7 +109,7 @@ export default function ExpenseForm({ setExpenses, setExpense, expense }) {
       />
       <p className="error">{errors.amount}</p>
 
-      <button className="add-btn">Add</button>
+      <button className="add-btn">{editingRowId ? "Update" : "Add"}</button>
     </form>
   );
 }
