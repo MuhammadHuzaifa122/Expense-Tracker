@@ -11,8 +11,8 @@ export default function ExpenseTable({
   const [rowId, setRowId] = useState("");
 
   const [filteredData, setQuery] = useFilter(expenses, (data) => data.category);
-  const total = filteredData.reduce((acc, current) => acc + current.amount, 0);
   const [menuPosition, setMenuPosition] = useState({});
+  const total = filteredData.reduce((acc, current) => acc + parseInt(current.amount), 0);
 
   return (
     <>
