@@ -7,7 +7,7 @@ export default function ExpenseForm({
   setExpense,
   expense,
   editingRowId,
-  setEditingRowId
+  setEditingRowId,
 }) {
   const [errors, setErrors] = useState({});
 
@@ -17,7 +17,10 @@ export default function ExpenseForm({
       { minLength: 3, message: "Title must be at least 3 characters" },
     ],
     category: [{ required: true, message: "Category is required" }],
-    amount: [{ required: true, message: "Amount is required" }],
+    amount: [
+      { required: true, message: "Amount is required" },
+      { pattern: /\d+/, message: "Pease enter a valid number" },
+    ],
   };
 
   const validate = (formData) => {
@@ -30,6 +33,10 @@ export default function ExpenseForm({
           return true;
         }
         if (rule.minLength && value.length < 3) {
+          errorData[key] = rule.message;
+          return true;
+        }
+        if (rule.pattern && !rule.pattern.test(value)) {
           errorData[key] = rule.message;
           return true;
         }
@@ -47,21 +54,21 @@ export default function ExpenseForm({
     if (Object.keys(validateResult).length) return;
 
     if (editingRowId) {
-      setExpenses((prevState) => 
+      setExpenses((prevState) =>
         prevState.map((prevExpense) => {
           if (prevExpense.id === editingRowId) {
             return { ...expense, id: editingRowId };
           }
           return prevExpense;
         })
-      )
+      );
       setExpense({
         title: "",
         category: "",
         amount: "",
       });
-      setEditingRowId('')
-      return
+      setEditingRowId("");
+      return;
     }
 
     setExpenses((prevState) => [
