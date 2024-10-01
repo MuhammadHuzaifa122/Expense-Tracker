@@ -1,6 +1,7 @@
 import React from "react";
 
-export default function ContextMenu({menuPosition, setMenuPosition}) {
+export default function ContextMenu({menuPosition, setMenuPosition, setExpenses, rowId}) {
+
   if (!menuPosition.left) return
   return (
     <div className="context-menu" style={menuPosition}>
@@ -9,7 +10,7 @@ export default function ContextMenu({menuPosition, setMenuPosition}) {
         setMenuPosition({})
       }}>Edit</div>
       <div onClick={() => {
-        console.log("Deleting");
+        setExpenses((prevState) => prevState.filter(expense => expense.id !== rowId  ))
         setMenuPosition({})
       }}>Delete</div>
     </div>
