@@ -12,8 +12,11 @@ export default function ExpenseTable({
 
   const [filteredData, setQuery] = useFilter(expenses, (data) => data.category);
   const [menuPosition, setMenuPosition] = useState({});
-  const total = filteredData.reduce((acc, current) => acc + parseInt(current.amount), 0);
-
+  const total = filteredData.reduce(
+    (acc, current) => acc + parseInt(current.amount),
+    0
+  );
+  const [sortCallback, setsortCallback] = useState(() => () => {});
   return (
     <>
       <ContextMenu
@@ -25,11 +28,14 @@ export default function ExpenseTable({
         rowId={rowId}
         setEditingRowId={setEditingRowId}
       />
-      <table className="expense-table" onClick={() => {
-        if (menuPosition.left) {
-          setMenuPosition({})
+      <table
+        className="expense-table"
+        onClick={() => {
+          if (menuPosition.left) {
+            setMenuPosition({});
+          }
         }}
-      }>
+      >
         <thead>
           <tr>
             <th>Title</th>
@@ -54,7 +60,7 @@ export default function ExpenseTable({
                   viewBox="0 0 384 512"
                   className="arrow up-arrow"
                   onClick={() => {
-                    setExpenses((prevState) => [...prevState.sort((a, b) => a.amount - b.amount)]);
+                    setsortCallback(() => (a, b) => a.amount - b.amount)
                   }}
                 >
                   <title>Ascending</title>
@@ -66,7 +72,7 @@ export default function ExpenseTable({
                   viewBox="0 0 384 512"
                   className="arrow down-arrow"
                   onClick={() => {
-                    setExpenses((prevState) => [...prevState.sort((a, b) => b.amount - a.amount)]);
+                    setsortCallback(() => (a, b) => b.amount - a.amount)
                   }}
                 >
                   <title>Descending</title>
@@ -77,7 +83,7 @@ export default function ExpenseTable({
           </tr>
         </thead>
         <tbody>
-          {filteredData.map(({ id, title, category, amount }) => (
+          {filteredData.sort(sortCallback).map(({ id, title, category, amount }) => (
             <tr
               key={id}
               onContextMenu={(e) => {
@@ -93,7 +99,9 @@ export default function ExpenseTable({
           ))}
           <tr>
             <th>Total</th>
-            <th></th>
+            <th className="clear-sort" onClick={() => {
+                    setsortCallback(() => () => {})
+                  }}>Clear Sort</th>
             <th>{total}</th>
           </tr>
         </tbody>
