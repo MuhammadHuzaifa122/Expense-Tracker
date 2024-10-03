@@ -3,7 +3,6 @@ import './App.css'
 import ExpenseForm from './components/ExpenseForm'
 import ExpenseTable from './components/ExpenseTable'
 import ExpenseData from '../ExpenseData'
-import { useState } from 'react'
 import { useLocalStorage } from '../Hooks/useLocalStorage'
 
 function App() {
@@ -13,7 +12,7 @@ function App() {
     amount: "",
   });
 const [expenses, setExpenses] = useLocalStorage('expenses', ExpenseData)
-const [editingRowId, setEditingRowId] = useLocalStorage('editingRowId', '')
+const [editingRowId, setEditingRowId] =  useLocalStorage('editingRowId', '')
 
   return (
     <main>
